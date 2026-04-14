@@ -1,0 +1,78 @@
+{
+  "version": "1.0",
+  "meta": {
+    "siteId": "demo-comic",
+    "siteName": "Demo Comic Site",
+    "baseUrl": "https://example.com",
+    "contentType": "comic"
+  },
+  "request": {
+    "method": "GET",
+    "charset": "utf-8",
+    "timeoutMs": 10000,
+    "headers": {
+      "User-Agent": "YealicoMVP/1.0"
+    }
+  },
+  "routes": {
+    "indexUrl": "https://example.com/comics",
+    "detailUrlMode": "direct"
+  },
+  "indexRule": {
+    "item": {
+      "selector": ".comic-item"
+    },
+    "fields": {
+      "title": {
+        "selector": ".title",
+        "function": "text",
+        "trim": true
+      },
+      "detailUrl": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      },
+      "cover": {
+        "selector": "img",
+        "function": "attr",
+        "param": "src",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "detailRule": {
+    "item": {
+      "selector": ".chapter-item"
+    },
+    "fields": {
+      "title": {
+        "selector": ".chapter-title",
+        "function": "text",
+        "trim": true
+      },
+      "url": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "contentRule": {
+    "images": {
+      "item": {
+        "selector": ".reader img"
+      },
+      "fields": {
+        "url": {
+          "selector": "",
+          "function": "attr",
+          "param": "data-src",
+          "absoluteUrl": true
+        }
+      }
+    }
+  }
+}

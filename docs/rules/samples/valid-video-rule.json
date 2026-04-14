@@ -1,0 +1,62 @@
+{
+  "version": "1.0",
+  "meta": {
+    "siteId": "demo-video",
+    "siteName": "Demo Video Site",
+    "baseUrl": "https://video.example.com",
+    "contentType": "video"
+  },
+  "request": {
+    "method": "GET",
+    "timeoutMs": 12000
+  },
+  "routes": {
+    "indexUrl": "https://video.example.com/list",
+    "detailUrlMode": "direct"
+  },
+  "indexRule": {
+    "item": {
+      "selector": ".episode-card"
+    },
+    "fields": {
+      "title": {
+        "selector": ".name",
+        "function": "text",
+        "trim": true
+      },
+      "detailUrl": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "detailRule": {
+    "item": {
+      "selector": ".episode-row"
+    },
+    "fields": {
+      "title": {
+        "selector": ".episode-name",
+        "function": "text"
+      },
+      "url": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "contentRule": {
+    "video": {
+      "url": {
+        "selector": "video source",
+        "function": "attr",
+        "param": "src",
+        "absoluteUrl": true
+      }
+    }
+  }
+}

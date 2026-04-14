@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "meta": {
+    "siteId": "invalid-method",
+    "siteName": "Invalid Method Site",
+    "baseUrl": "https://invalid.example.com",
+    "contentType": "gallery"
+  },
+  "request": {
+    "method": "POST",
+    "timeoutMs": 8000
+  },
+  "routes": {
+    "indexUrl": "https://invalid.example.com/list",
+    "detailUrlMode": "direct"
+  },
+  "indexRule": {
+    "item": {
+      "selector": ".item"
+    },
+    "fields": {
+      "title": {
+        "selector": ".title",
+        "function": "text"
+      },
+      "detailUrl": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "detailRule": {
+    "item": {
+      "selector": ".album-page"
+    },
+    "fields": {
+      "title": {
+        "selector": "h1",
+        "function": "text"
+      },
+      "url": {
+        "selector": "a.next",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "contentRule": {
+    "images": {
+      "item": {
+        "selector": ".gallery img"
+      },
+      "fields": {
+        "url": {
+          "selector": "",
+          "function": "attr",
+          "param": "src",
+          "absoluteUrl": true
+        }
+      }
+    }
+  }
+}

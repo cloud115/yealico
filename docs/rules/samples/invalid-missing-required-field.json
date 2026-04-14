@@ -1,0 +1,57 @@
+{
+  "version": "1.0",
+  "meta": {
+    "siteId": "invalid-missing-meta-field",
+    "siteName": "Invalid Missing Field",
+    "baseUrl": "https://invalid.example.com"
+  },
+  "request": {
+    "method": "GET"
+  },
+  "routes": {
+    "indexUrl": "https://invalid.example.com/list",
+    "detailUrlMode": "direct"
+  },
+  "indexRule": {
+    "item": {
+      "selector": ".item"
+    },
+    "fields": {
+      "title": {
+        "selector": ".title",
+        "function": "text"
+      },
+      "detailUrl": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "detailRule": {
+    "item": {
+      "selector": ".detail-item"
+    },
+    "fields": {
+      "title": {
+        "selector": ".title",
+        "function": "text"
+      },
+      "url": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href"
+      }
+    }
+  },
+  "contentRule": {
+    "video": {
+      "url": {
+        "selector": "video source",
+        "function": "attr",
+        "param": "src"
+      }
+    }
+  }
+}

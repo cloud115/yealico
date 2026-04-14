@@ -1,0 +1,59 @@
+{
+  "version": "1.0",
+  "meta": {
+    "siteId": "invalid-detail-mode",
+    "siteName": "Invalid Detail Mode Site",
+    "baseUrl": "https://invalid.example.com",
+    "contentType": "video"
+  },
+  "request": {
+    "method": "GET"
+  },
+  "routes": {
+    "indexUrl": "https://invalid.example.com/list",
+    "detailUrlMode": "script"
+  },
+  "indexRule": {
+    "item": {
+      "selector": ".item"
+    },
+    "fields": {
+      "title": {
+        "selector": ".title",
+        "function": "text"
+      },
+      "detailUrl": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "detailRule": {
+    "item": {
+      "selector": ".episode"
+    },
+    "fields": {
+      "title": {
+        "selector": ".episode-title",
+        "function": "text"
+      },
+      "url": {
+        "selector": "a",
+        "function": "attr",
+        "param": "href"
+      }
+    }
+  },
+  "contentRule": {
+    "video": {
+      "url": {
+        "selector": "video source",
+        "function": "attr",
+        "param": "src",
+        "absoluteUrl": true
+      }
+    }
+  }
+}
