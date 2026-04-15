@@ -48,3 +48,20 @@ Rule-driven Flutter reader MVP for Android, with Web support for debugging.
 
 - Dev entry: `flutter run -t lib/main_dev.dart`
 - Prod entry: `flutter run -t lib/main_prod.dart`
+
+## Web Debug Proxy (FreeImages)
+
+Use this only for local Web debugging when target sites block browser CORS.
+
+1. Start proxy server:
+   `node scripts/dev/freeimages_proxy_server.mjs`
+2. Check health endpoint:
+   `http://localhost:8787/health`
+3. Import proxy rule file:
+   `docs/rules/samples/freeimages-cn-gallery-rule-web-dev-proxy.json`
+4. Run Flutter Web in dev mode and open the imported site.
+
+Notes:
+- This proxy is for local development only and should not be used as production traffic infrastructure.
+- The Android/non-Web rule file remains:
+  `docs/rules/samples/freeimages-cn-gallery-rule.json`

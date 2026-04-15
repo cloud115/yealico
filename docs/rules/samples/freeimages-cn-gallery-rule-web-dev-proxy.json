@@ -1,0 +1,78 @@
+{
+  "version": "1.0",
+  "meta": {
+    "siteId": "freeimages-cn-gallery-web-proxy",
+    "siteName": "FreeImages CN Gallery (Web Dev Proxy)",
+    "baseUrl": "http://localhost:8787",
+    "contentType": "gallery"
+  },
+  "request": {
+    "method": "GET",
+    "charset": "utf-8",
+    "timeoutMs": 15000
+  },
+  "routes": {
+    "indexUrl": "http://localhost:8787/cn/search/cat/2",
+    "detailUrlMode": "direct"
+  },
+  "indexRule": {
+    "item": {
+      "selector": ".grid-item article.grid-article"
+    },
+    "fields": {
+      "title": {
+        "selector": "img.grid-thumb",
+        "function": "attr",
+        "param": "alt",
+        "trim": true
+      },
+      "detailUrl": {
+        "selector": "a.grid-link",
+        "function": "attr",
+        "param": "href",
+        "absoluteUrl": true
+      },
+      "cover": {
+        "selector": "img.grid-thumb",
+        "function": "attr",
+        "param": "src",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "detailRule": {
+    "item": {
+      "selector": "html"
+    },
+    "fields": {
+      "title": {
+        "selector": "#photo-title",
+        "function": "text",
+        "trim": true
+      },
+      "url": {
+        "selector": "link[rel='canonical']",
+        "function": "attr",
+        "param": "href",
+        "regex": "^https?://www\\\\.freeimages\\\\.com",
+        "replacement": "",
+        "absoluteUrl": true
+      }
+    }
+  },
+  "contentRule": {
+    "images": {
+      "item": {
+        "selector": "#photo-wrapper img#photo"
+      },
+      "fields": {
+        "url": {
+          "selector": "",
+          "function": "attr",
+          "param": "src",
+          "absoluteUrl": true
+        }
+      }
+    }
+  }
+}
