@@ -55,13 +55,26 @@ Use this only for local Web debugging when target sites block browser CORS.
 
 1. Start proxy server:
    `node scripts/dev/freeimages_proxy_server.mjs`
+   Recommended for FreeImages (PowerShell mode + upstream proxy):
+   `$env:UPSTREAM_FETCH_MODE='powershell'; $env:HTTPS_PROXY='http://127.0.0.1:7890'; node scripts/dev/freeimages_proxy_server.mjs`
 2. Check health endpoint:
    `http://localhost:8787/health`
 3. Import proxy rule file:
    `docs/rules/samples/freeimages-cn-gallery-rule-web-dev-proxy.json`
 4. Run Flutter Web in dev mode and open the imported site.
 
+## Android Debug Proxy (FreeImages)
+
+When the target site blocks Dart/Node request fingerprints with `403`, route Android to the same local proxy:
+
+1. Start proxy server on your host machine (same as above).
+2. For Android emulator, import:
+   `docs/rules/samples/freeimages-cn-gallery-rule-android-dev-proxy.json`
+3. For physical devices, replace `10.0.2.2` in that rule with your host LAN IP.
+
 Notes:
 - This proxy is for local development only and should not be used as production traffic infrastructure.
-- The Android/non-Web rule file remains:
+- Upstream mode options:
+  `UPSTREAM_FETCH_MODE=auto|node|powershell` (default `auto`).
+- The direct Android/non-Web rule file remains:
   `docs/rules/samples/freeimages-cn-gallery-rule.json`
