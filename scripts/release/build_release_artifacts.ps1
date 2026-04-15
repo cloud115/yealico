@@ -1,5 +1,5 @@
 param(
-  [string]$BuildName = "0.1.0",
+  [string]$BuildName = "1.0.0",
   [string]$BuildNumber = "1"
 )
 

@@ -3,7 +3,7 @@
 ## Pre-Release
 
 - [ ] Working tree is clean
-- [ ] Version is confirmed (`build-name` / `build-number`)
+- [ ] Version is confirmed (`build-name` must follow the PRD version)
 - [ ] `flutter test` passes
 - [ ] Manual acceptance checklist reviewed (`docs/qa/t16-acceptance-checklist.md`)
 

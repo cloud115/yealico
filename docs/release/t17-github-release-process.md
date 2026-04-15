@@ -8,7 +8,7 @@ Define a repeatable release delivery process for MVP.
 
 - Source branch: `main`
 - Version:
-  - app version (`build-name`)
+  - app version (`build-name`, must match the PRD version)
   - build number (`build-number`)
 - Changelog notes
 

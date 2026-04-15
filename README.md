@@ -2,6 +2,12 @@
 
 Rule-driven Flutter reader MVP for Android, with Web support for debugging.
 
+## Version Baseline
+
+- PRD baseline: `1.0.0`
+- App version: `1.0.0+1`
+- Docs index: `docs/README.md`
+
 ## Current Stage
 
 - `T01` completed: Flutter project shell, dev/prod entrypoints, Android+Web targets.
@@ -20,7 +26,7 @@ Rule-driven Flutter reader MVP for Android, with Web support for debugging.
 - `T14` completed: dev/prod error message split and internal logging policy.
 - `T15` completed: runtime cache and baseline performance optimization.
 - `T16` completed: acceptance checklist and test report preparation.
-- `T17` completed: release process and delivery artifacts (web build verified, apk build network-blocked).
+- `T17` completed: release process and delivery artifacts (web build and apk build verified).
 
 ## Rule Docs
 

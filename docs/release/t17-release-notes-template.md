@@ -1,5 +1,7 @@
 # Release v<version>
 
+Version note: `<version>` should match the active PRD version.
+
 ## Highlights
 
 - Rule import from GitHub Raw URL

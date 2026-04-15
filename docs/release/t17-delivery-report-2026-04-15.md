@@ -14,7 +14,7 @@
 - Artifact: `build/web/`
 
 2. Android APK release build
-- `flutter build apk --release --build-name=0.1.0 --build-number=1`
+- `flutter build apk --release --build-name=1.0.0 --build-number=1`
 - Result: success
 - Artifact: `build/app/outputs/flutter-apk/app-release.apk`
 - Size: ~49.1MB
@@ -28,4 +28,4 @@
 
 - Proceed with tag + GitHub release using:
   - `docs/release/t17-release-checklist.md`
-  - `docs/release/v0.1.0-notes.md`
+  - `docs/release/v1.0.0-notes.md`
