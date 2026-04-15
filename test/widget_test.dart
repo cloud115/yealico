@@ -22,5 +22,12 @@ void main() {
     expect(find.text('Android, Web'), findsOneWidget);
     expect(find.text('Enabled'), findsOneWidget);
     expect(find.text('Import Rule (T04)'), findsOneWidget);
+    expect(find.text('Imported Sites (0)'), findsOneWidget);
+    expect(
+      find.text(
+        'No site has been imported yet. Use "Import Rule (T04)" to add one.',
+      ),
+      findsOneWidget,
+    );
   });
 }

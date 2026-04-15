@@ -24,7 +24,7 @@ void main() {
 }
 
 class _FakeHtmlFetcher extends HtmlPageFetcher {
-  const _FakeHtmlFetcher({required this.body, required this.uri});
+  _FakeHtmlFetcher({required this.body, required this.uri});
 
   final String body;
   final Uri uri;
@@ -36,6 +36,7 @@ class _FakeHtmlFetcher extends HtmlPageFetcher {
     Map<String, String>? headers,
     Duration timeout = const Duration(seconds: 10),
     String charset = 'utf-8',
+    bool useCache = true,
   }) async {
     return HtmlFetchResponse(uri: this.uri, body: body);
   }

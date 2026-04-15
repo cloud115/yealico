@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/errors/app_error_policy.dart';
+import '../../../core/config/app_runtime.dart';
+import '../../../core/logging/app_logger.dart';
 import '../../../core/models/rule_import_request.dart';
 import '../domain/rule_import_service.dart';
 
@@ -41,29 +44,51 @@ class _RuleImportPageState extends State<RuleImportPage> {
       setState(() {
         _imported = request;
       });
-    } on RuleImportException catch (e) {
+    } on RuleImportException catch (e, st) {
+      AppLogger.error(scope: 'RuleImportPage.import', error: e, stackTrace: st);
       if (!mounted) {
         return;
       }
       setState(() {
-        _errorMessage = e.message;
+        _errorMessage = AppErrorPolicy.userMessage(
+          error: e,
+          fallback: 'Rule import failed.',
+        );
       });
-    } on RuleValidationException catch (e) {
+    } on RuleValidationException catch (e, st) {
+      AppLogger.error(
+        scope: 'RuleImportPage.validation',
+        error: e,
+        stackTrace: st,
+      );
       if (!mounted) {
         return;
       }
       setState(() {
-        _errorMessage = 'Rule validation failed.';
-        _validationErrors = e.issues
-            .map((issue) => '[${issue.path}] ${issue.message}')
-            .toList(growable: false);
+        _errorMessage = AppErrorPolicy.userMessage(
+          error: e,
+          fallback: 'Rule validation failed.',
+        );
+        _validationErrors = AppRuntime.config.enableVerboseLogging
+            ? e.issues
+                  .map((issue) => '[${issue.path}] ${issue.message}')
+                  .toList(growable: false)
+            : const <String>[];
       });
-    } catch (_) {
+    } catch (e, st) {
+      AppLogger.error(
+        scope: 'RuleImportPage.unknown',
+        error: e,
+        stackTrace: st,
+      );
       if (!mounted) {
         return;
       }
       setState(() {
-        _errorMessage = 'Unknown import error.';
+        _errorMessage = AppErrorPolicy.userMessage(
+          error: e,
+          fallback: 'Unknown import error.',
+        );
       });
     } finally {
       if (mounted) {
@@ -109,7 +134,11 @@ class _RuleImportPageState extends State<RuleImportPage> {
                       .toList(growable: false),
                 ),
               ),
-            if (_imported != null) _ImportedCard(request: _imported!),
+            if (_imported != null)
+              _ImportedCard(
+                request: _imported!,
+                onAddToSiteList: () => Navigator.of(context).pop(_imported),
+              ),
           ],
         ),
       ),
@@ -118,9 +147,10 @@ class _RuleImportPageState extends State<RuleImportPage> {
 }
 
 class _ImportedCard extends StatelessWidget {
-  const _ImportedCard({required this.request});
+  const _ImportedCard({required this.request, required this.onAddToSiteList});
 
   final RuleImportRequest request;
+  final VoidCallback onAddToSiteList;
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +166,12 @@ class _ImportedCard extends StatelessWidget {
             Text('siteId: ${request.siteId ?? '(not provided)'}'),
             Text('siteName: ${request.siteName ?? '(not provided)'}'),
             Text('jsonLength: ${request.rawJson.length}'),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: onAddToSiteList,
+              icon: const Icon(Icons.playlist_add),
+              label: const Text('Add To Site List (T07)'),
+            ),
           ],
         ),
       ),

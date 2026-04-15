@@ -6,7 +6,7 @@ import 'rule_runtime_engine.dart';
 
 class RuleRuntimeService {
   RuleRuntimeService({HtmlPageFetcher? fetcher, RuleRuntimeEngine? engine})
-    : _fetcher = fetcher ?? const HtmlPageFetcher(),
+    : _fetcher = fetcher ?? HtmlPageFetcher(),
       _engine = engine ?? RuleRuntimeEngine();
 
   final HtmlPageFetcher _fetcher;
