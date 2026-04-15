@@ -72,6 +72,10 @@ When the target site blocks Dart/Node request fingerprints with `403`, route And
    `docs/rules/samples/freeimages-cn-gallery-rule-android-dev-proxy.json`
 3. For physical devices, replace `10.0.2.2` in that rule with your host LAN IP.
 
+Android notes:
+- `debug/profile` manifests now enable cleartext traffic for local `http://` dev proxy.
+- Direct rule (`https://www.freeimages.com/...`) may still return `403` on Android due to upstream anti-bot policy; use proxy rule for dev verification.
+
 Notes:
 - This proxy is for local development only and should not be used as production traffic infrastructure.
 - Upstream mode options:
