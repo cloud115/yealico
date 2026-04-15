@@ -9,6 +9,18 @@ This directory is the documentation baseline for PRD `1.0.0`.
 - Delivery status: PRD `1.0.0` scope is substantially complete
 - Release baseline: `v1.0.0`
 
+## Development Toolchain Baseline
+
+- Flutter SDK: `3.27.4`
+- Dart SDK: `3.6.2`
+- Android build JDK: `17`
+- Android SDK target: API `35`
+- Required Android SDK packages:
+  - `platform-tools`
+  - `platforms;android-35`
+  - `build-tools;35.0.0`
+  - `ndk;26.1.10909125`
+
 ## Versioning Rule
 
 - PRD version is the source of truth for release versioning.
@@ -38,4 +50,3 @@ This directory is the documentation baseline for PRD `1.0.0`.
 3. Add new progress notes under `docs/progress/`.
 4. Update or append architecture notes only for changed areas.
 5. Prepare QA and release notes against the `1.0.1` scope.
-

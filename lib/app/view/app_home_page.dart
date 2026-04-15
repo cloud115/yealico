@@ -131,7 +131,8 @@ class _AppHomePageState extends State<AppHomePage> {
                   ? const _EmptySitesState()
                   : ListView.separated(
                       itemCount: _sites.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 12),
                       itemBuilder: (context, index) {
                         final site = _sites[index];
                         return _SiteCard(

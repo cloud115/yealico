@@ -12,6 +12,18 @@ Define a repeatable release delivery process for MVP.
   - build number (`build-number`)
 - Changelog notes
 
+## Build Environment
+
+- Flutter SDK: `3.27.4`
+- Dart SDK: `3.6.2`
+- JDK: `17`
+- Android SDK packages:
+  - `platform-tools`
+  - `platforms;android-35`
+  - `build-tools;35.0.0`
+  - `ndk;26.1.10909125`
+- If the current network requires a proxy, export `HTTP_PROXY` and `HTTPS_PROXY` to `http://127.0.0.1:7890` before running release builds.
+
 ## Build Artifacts
 
 - Android APK:

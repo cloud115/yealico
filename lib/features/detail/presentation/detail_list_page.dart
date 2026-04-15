@@ -75,7 +75,8 @@ class _DetailListPageState extends State<DetailListPage> {
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: entries.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final entry = entries[index];
               return _DetailItemCard(

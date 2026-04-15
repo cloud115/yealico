@@ -60,7 +60,8 @@ class _SiteCatalogPageState extends State<SiteCatalogPage> {
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: entries.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final entry = entries[index];
               return _CatalogItemCard(

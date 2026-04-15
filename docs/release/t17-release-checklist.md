@@ -4,6 +4,15 @@
 
 - [ ] Working tree is clean
 - [ ] Version is confirmed (`build-name` must follow the PRD version)
+- [ ] `flutter --version` reports Flutter `3.27.4`
+- [ ] `dart --version` reports Dart `3.6.2`
+- [ ] `java -version` reports JDK `17`
+- [ ] Android SDK contains:
+  - `platform-tools`
+  - `platforms;android-35`
+  - `build-tools;35.0.0`
+  - `ndk;26.1.10909125`
+- [ ] If current network is restricted, `HTTP_PROXY` and `HTTPS_PROXY` are set to `http://127.0.0.1:7890`
 - [ ] `flutter test` passes
 - [ ] Manual acceptance checklist reviewed (`docs/qa/t16-acceptance-checklist.md`)
 

@@ -94,7 +94,7 @@ class _ImageReaderPageState extends State<ImageReaderPage> {
           }
           return const Center(child: CircularProgressIndicator());
         },
-        errorBuilder: (_, _, _) => const Center(
+        errorBuilder: (context, error, stackTrace) => const Center(
           child: Text(
             'Image load failed',
             style: TextStyle(color: Colors.white),
@@ -152,7 +152,7 @@ class _ImageReaderPageState extends State<ImageReaderPage> {
                   child: Center(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
+                        color: Colors.black.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Padding(

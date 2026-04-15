@@ -14,7 +14,7 @@ void main() {
             'https://example.com/1.jpg',
             'https://example.com/2.jpg',
           ],
-          imageBuilder: (_, _, index) => Text('image-$index'),
+          imageBuilder: (context, imageUrl, index) => Text('image-$index'),
         ),
       ),
     );

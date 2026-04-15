@@ -8,6 +8,20 @@ Rule-driven Flutter reader MVP for Android, with Web support for debugging.
 - App version: `1.0.0+1`
 - Docs index: `docs/README.md`
 
+## Development Baseline
+
+- Flutter SDK: `3.27.4`
+- Dart SDK: `3.6.2`
+- Android build JDK: `17`
+- Android SDK packages:
+  - `platform-tools`
+  - `platforms;android-35`
+  - `build-tools;35.0.0`
+  - `ndk;26.1.10909125`
+- Proxy for restricted networks:
+  - shell `HTTP_PROXY` and `HTTPS_PROXY`: `http://127.0.0.1:7890`
+  - Gradle proxy is already configured in `android/gradle.properties`
+
 ## Current Stage
 
 - `T01` completed: Flutter project shell, dev/prod entrypoints, Android+Web targets.
