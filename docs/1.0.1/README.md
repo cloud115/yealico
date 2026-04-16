@@ -1,4 +1,4 @@
-# PRD 1.0.1 文档索引
+﻿# PRD 1.0.1 文档索引
 
 ## PRD
 
@@ -8,8 +8,7 @@
 ## 架构
 
 - `docs/1.0.1/architecture/`
-- 计划中的新增文档（待补充）：
-  - `docs/1.0.1/architecture/t18-runtime-hardening.md`
+- `docs/1.0.1/architecture/t18-runtime-hardening.md`
 
 ## 进度
 
@@ -19,9 +18,8 @@
 ## QA
 
 - `docs/1.0.1/qa/`
-- 计划中的新增文档（待补充）：
-  - `docs/1.0.1/qa/t18-acceptance.md`
-  - `docs/1.0.1/qa/t18-test-report.md`
+- `docs/1.0.1/qa/t18-acceptance.md`
+- `docs/1.0.1/qa/t18-test-report.md`
 
 ## 发布
 
