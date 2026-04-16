@@ -1,5 +1,11 @@
 # 仓库协作规范
 
+## 沟通与语言规范
+- 默认沟通语言为简体中文；除非用户明确要求，禁止切换为其他语言。  
+- 解释说明、问题定位、错误原因、命令说明、代码注释、示例输出等说明性文字均使用中文。  
+- Git 提交信息默认使用中文（建议 `type: 中文摘要`，如 `docs: 同步 1.0.1 文档口径`）。  
+- 新增或更新 Markdown 文档（`.md`）时，正文内容默认中文优先；如需保留英文术语，需配套中文语义说明。  
+
 ## 项目结构与模块组织
 `lib/` 是主代码目录：`core/` 放配置、模型、存储、错误与日志；`features/` 按功能拆分并遵循 `data/domain/presentation` 分层；`app/` 与 `bootstrap/` 负责应用装配；入口文件为 `main.dart`、`main_dev.dart`、`main_prod.dart`。  
 `test/` 与 `lib/` 对齐，当前以 `test/core/` 和 `test/features/` 为主。  
@@ -53,7 +59,7 @@
 涉及页面行为时补充 widget 测试，重点覆盖错误态、空态与关键交互。
 
 ## 提交与 Pull Request 规范
-提交信息遵循 Conventional Commits，历史中主要使用：`feat:`、`fix:`、`docs:`、`build:`（示例：`feat: add android rendered page bridge`）。  
+提交信息遵循 Conventional Commits，历史中主要使用：`feat:`、`fix:`、`docs:`、`build:`（示例：`feat: 新增 Android 渲染抓取桥`）。  
 单次提交聚焦单一变更，正文可补充影响范围。  
 PR 需包含：变更摘要、影响模块、执行过的命令（如 `flutter analyze`、`flutter test`）及结果；UI 改动附截图；关联对应任务或 PRD 条目。
 
