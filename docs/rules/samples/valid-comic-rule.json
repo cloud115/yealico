@@ -10,6 +10,8 @@
     "method": "GET",
     "charset": "utf-8",
     "timeoutMs": 10000,
+    "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36",
+    "refererPolicy": "origin",
     "headers": {
       "User-Agent": "YealicoMVP/1.0"
     }
@@ -61,6 +63,7 @@
     }
   },
   "contentRule": {
+    "decryptScript": "JSON.stringify(window.__IMAGES__ || [])",
     "images": {
       "item": {
         "selector": ".reader img"

@@ -45,6 +45,8 @@ Required root fields:
   - `charset` (`string`)
   - `timeoutMs` (`integer`, > 0)
   - `headers` (`object`, key/value string pairs)
+  - `userAgent` (`string`, optional runtime override)
+  - `refererPolicy` (`string`, one of `origin`, `page`, `none`; default `origin`)
 
 ### `routes`
 
@@ -98,6 +100,9 @@ Any extractor field uses the same object structure:
 
 Optional for all types:
 
+- `decryptScript` (`string`)
+  - Runs after the page is rendered in the hardened runtime.
+  - Must be a non-empty string when present.
 - `secondLevel` (`object`)
   - Allows one additional page request at most.
   - Must not define nested second-level chains.
@@ -109,6 +114,15 @@ Optional for all types:
 - Reject if required fields are missing.
 - Reject if extractor `function = "attr"` and `param` is missing.
 - Reject if `contentRule` branch does not match `meta.contentType`.
+- Reject if `request.userAgent` exists but is empty or not a string.
+- Reject if `request.refererPolicy` exists but is not one of `origin/page/none`.
+- Reject if `contentRule.decryptScript` exists but is empty or not a string.
+
+## Backward Compatibility
+
+- Existing `version: "1.0"` rules remain valid.
+- The hardened runtime fields are optional and can be added incrementally.
+- Rules that omit these fields continue to use the existing request shape.
 
 ## Non-Goals (Explicit)
 

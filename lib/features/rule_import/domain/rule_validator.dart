@@ -93,6 +93,30 @@ class RuleValidator {
           }
         }
       }
+
+      final userAgent = request['userAgent'];
+      if (userAgent != null && (userAgent is! String || userAgent.isEmpty)) {
+        issues.add(
+          const RuleValidationIssue(
+            code: 'invalid_type',
+            path: 'request.userAgent',
+            message: 'request.userAgent must be a non-empty string.',
+          ),
+        );
+      }
+
+      final refererPolicy = request['refererPolicy'];
+      if (refererPolicy != null &&
+          (refererPolicy is! String ||
+              !_supportedRefererPolicies.contains(refererPolicy))) {
+        issues.add(
+          const RuleValidationIssue(
+            code: 'unsupported_value',
+            path: 'request.refererPolicy',
+            message: 'refererPolicy must be one of origin/page/none.',
+          ),
+        );
+      }
     }
 
     if (routes != null) {
@@ -182,6 +206,18 @@ class RuleValidator {
     }
 
     if (contentRule != null && contentType != null) {
+      final decryptScript = contentRule['decryptScript'];
+      if (decryptScript != null &&
+          (decryptScript is! String || decryptScript.isEmpty)) {
+        issues.add(
+          const RuleValidationIssue(
+            code: 'invalid_type',
+            path: 'contentRule.decryptScript',
+            message: 'contentRule.decryptScript must be a non-empty string.',
+          ),
+        );
+      }
+
       if (contentType == 'comic' || contentType == 'gallery') {
         final images = _requireMap(
           contentRule,
@@ -479,3 +515,4 @@ class RuleValidationIssue {
 
 const _supportedContentTypes = <String>{'comic', 'gallery', 'video'};
 const _supportedExtractorFunctions = <String>{'text', 'html', 'attr'};
+const _supportedRefererPolicies = <String>{'origin', 'page', 'none'};
