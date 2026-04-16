@@ -1,104 +1,111 @@
-# Yealico
+﻿# Yealico
 
-Rule-driven Flutter reader MVP for Android, with Web support for debugging.
+面向 Android 的规则驱动 Flutter 阅读器 MVP，并提供 Web 调试支持。
 
-## Version Baseline
+## 平台范围
 
-- PRD baseline: `1.0.0`
-- App version: `1.0.0+1`
-- Docs index: `docs/README.md`
+- 运行目标：Android App
+- 开发/调试目标：Web
+- 当前仓库不维护：Windows 桌面端（`windows/` 目录已移除）
 
-## Development Baseline
+## 版本基线
 
-- Flutter SDK: `3.27.4`
-- Dart SDK: `3.6.2`
-- Android build JDK: `17`
-- Android SDK packages:
+- 当前应用版本：`1.0.0+1`（见 `pubspec.yaml`）
+- 文档根索引：`docs/README.md`
+- 已归档 PRD 版本：`1.0.0`、`1.0.1`
+- 版本约束：
+  - `pubspec.yaml` 中 `build-name` 必须与目标 PRD 版本一致
+  - `build-number` 按内部构建号持续递增
+
+## 开发环境基线
+
+- Flutter SDK：`3.27.4`
+- Dart SDK：`3.6.2`
+- Android 构建 JDK：`17`
+- Android SDK 包：
   - `platform-tools`
   - `platforms;android-35`
   - `build-tools;35.0.0`
   - `ndk;26.1.10909125`
-- Proxy for restricted networks:
-  - shell `HTTP_PROXY` and `HTTPS_PROXY`: `http://127.0.0.1:7890`
-  - Gradle proxy is already configured in `android/gradle.properties`
+- 受限网络代理：
+  - Shell `HTTP_PROXY` / `HTTPS_PROXY`：`http://127.0.0.1:7890`
+  - Gradle 代理已在 `android/gradle.properties` 配置
 
-## Current Stage
+## 当前阶段
 
-- `T01` completed: Flutter project shell, dev/prod entrypoints, Android+Web targets.
-- `T02` completed: rule schema v1 document and sample JSON files.
-- `T03` completed: core data models and storage contracts.
-- `T04` completed: GitHub Raw rule import flow (download + preprocess + import request).
-- `T05` completed: schema validator with structured errors and import-time validation.
-- `T06` completed: runtime HTML request/parse/extraction engine.
-- `T07` completed: site list page with imported site metadata display.
-- `T08` completed: site catalog parsing and catalog list page.
-- `T09` completed: detail parsing and detail list page.
-- `T10` completed: image content parsing and URL list page.
-- `T11` completed: image reader with tap/swipe page turning.
-- `T12` completed: video URL parsing and display page.
-- `T13` completed: video player integration with basic controls.
-- `T14` completed: dev/prod error message split and internal logging policy.
-- `T15` completed: runtime cache and baseline performance optimization.
-- `T16` completed: acceptance checklist and test report preparation.
-- `T17` completed: release process and delivery artifacts (web build and apk build verified).
+- `T01` 已完成：Flutter 项目壳、dev/prod 入口、Android+Web 目标。
+- `T02` 已完成：规则 schema v1 文档与样例 JSON。
+- `T03` 已完成：核心数据模型与存储契约。
+- `T04` 已完成：GitHub Raw 规则导入流程（下载 + 预处理 + 导入请求）。
+- `T05` 已完成：结构化错误规则校验器与导入时校验。
+- `T06` 已完成：运行时 HTML 请求/解析/提取引擎。
+- `T07` 已完成：站点列表页与导入站点元信息展示。
+- `T08` 已完成：站点目录解析与目录列表页。
+- `T09` 已完成：详情解析与详情列表页。
+- `T10` 已完成：图片内容解析与 URL 列表页。
+- `T11` 已完成：图片阅读器（点击/滑动翻页）。
+- `T12` 已完成：视频 URL 解析与展示页。
+- `T13` 已完成：视频播放器接入与基础控制。
+- `T14` 已完成：dev/prod 错误提示分层与内部日志策略。
+- `T15` 已完成：运行时缓存与基线性能优化。
+- `T16` 已完成：验收清单与测试报告准备。
+- `T17` 已完成：发布流程与交付产物（web build 与 apk build 已验证）。
 
-## Rule Docs
+## 文档导航
 
-- Schema: `docs/rules/rule-schema-v1.md`
-- Samples: `docs/rules/samples/`
-- Import flow: `docs/architecture/t04-rule-import-flow.md`
-- Validator: `docs/architecture/t05-rule-validator.md`
-- Runtime engine: `docs/architecture/t06-rule-runtime-engine.md`
-- Site list page: `docs/architecture/t07-site-list-page.md`
-- Catalog page: `docs/architecture/t08-catalog-page.md`
-- Detail page: `docs/architecture/t09-detail-page.md`
-- Image content parse: `docs/architecture/t10-image-content-parse.md`
-- Image reader: `docs/architecture/t11-image-reader.md`
-- Video content parse: `docs/architecture/t12-video-content-parse.md`
-- Video player: `docs/architecture/t13-video-player.md`
-- Error and logging policy: `docs/architecture/t14-error-and-logging-policy.md`
-- Cache and performance: `docs/architecture/t15-cache-and-performance.md`
-- Acceptance checklist: `docs/qa/t16-acceptance-checklist.md`
-- Test report: `docs/qa/t16-test-report-2026-04-15.md`
-- Release process: `docs/release/t17-github-release-process.md`
-- Release checklist: `docs/release/t17-release-checklist.md`
-- Delivery report: `docs/release/t17-delivery-report-2026-04-15.md`
+- 文档总览：`docs/README.md`
+- `1.0.0` 版本索引：`docs/1.0.0/README.md`
+- `1.0.1` 版本索引：`docs/1.0.1/README.md`
+- `PRD 1.0.0`：`docs/1.0.0/PRD/prd.md`
+- `PRD 1.0.1`：`docs/1.0.1/PRD/prd.md`
+- 规则 schema 与样例：`docs/1.0.1/PRD/schema.md`、`docs/rules/samples/`
 
-## Run
+## 文档结构规范
 
-- Dev entry: `flutter run -t lib/main_dev.dart`
-- Prod entry: `flutter run -t lib/main_prod.dart`
+项目文档统一采用 `docs/<version>/<category>/...` 结构，每个版本目录按以下分类组织：
 
-## Web Debug Proxy (FreeImages)
+- `PRD/`：需求文档与规则 schema
+- `architecture/`：架构设计与任务技术方案
+- `progress/`：任务计划、环境基线与进展记录
+- `qa/`：验收标准、测试记录与测试报告
+- `release/`：发布流程、检查单、交付说明与版本说明
 
-Use this only for local Web debugging when target sites block browser CORS.
+新增文档优先放到对应版本目录；跨版本通用规则样例统一放在 `docs/rules/samples/`。
 
-1. Start proxy server:
+## 运行
+
+- 开发入口：`flutter run -t lib/main_dev.dart`
+- 生产入口验证：`flutter run -t lib/main_prod.dart`
+
+## Web 调试代理（FreeImages）
+
+当目标站点阻止浏览器 CORS 时，仅用于本地 Web 调试。
+
+1. 启动代理服务：
    `node scripts/dev/freeimages_proxy_server.mjs`
-   Recommended for FreeImages (PowerShell mode + upstream proxy):
+   FreeImages 推荐方式（PowerShell + 上游代理）：
    `$env:UPSTREAM_FETCH_MODE='powershell'; $env:HTTPS_PROXY='http://127.0.0.1:7890'; node scripts/dev/freeimages_proxy_server.mjs`
-2. Check health endpoint:
+2. 检查健康接口：
    `http://localhost:8787/health`
-3. Import proxy rule file:
+3. 导入代理规则文件：
    `docs/rules/samples/freeimages-cn-gallery-rule-web-dev-proxy.json`
-4. Run Flutter Web in dev mode and open the imported site.
+4. 以 dev 模式运行 Flutter Web 并打开导入站点。
 
-## Android Debug Proxy (FreeImages)
+## Android 调试代理（FreeImages）
 
-When the target site blocks Dart/Node request fingerprints with `403`, route Android to the same local proxy:
+当目标站点对 Dart/Node 请求指纹返回 `403` 时，将 Android 请求同样路由到本地代理：
 
-1. Start proxy server on your host machine (same as above).
-2. For Android emulator, import:
+1. 在主机启动代理服务（同上）。
+2. Android 模拟器导入：
    `docs/rules/samples/freeimages-cn-gallery-rule-android-dev-proxy.json`
-3. For physical devices, replace `10.0.2.2` in that rule with your host LAN IP.
+3. 真机调试时，将该规则中的 `10.0.2.2` 替换为主机局域网 IP。
 
-Android notes:
-- `debug/profile` manifests now enable cleartext traffic for local `http://` dev proxy.
-- Direct rule (`https://www.freeimages.com/...`) may still return `403` on Android due to upstream anti-bot policy; use proxy rule for dev verification.
+Android 说明：
+- `debug/profile` manifest 已允许本地 `http://` 调试代理明文流量。
+- 直连规则（`https://www.freeimages.com/...`）在 Android 仍可能因上游反爬返回 `403`，开发验证请使用代理规则。
 
-Notes:
-- This proxy is for local development only and should not be used as production traffic infrastructure.
-- Upstream mode options:
-  `UPSTREAM_FETCH_MODE=auto|node|powershell` (default `auto`).
-- The direct Android/non-Web rule file remains:
+注意：
+- 该代理仅用于本地开发，不能作为生产流量基础设施。
+- 上游模式选项：`UPSTREAM_FETCH_MODE=auto|node|powershell`（默认 `auto`）。
+- Android 非 Web 直连规则文件仍保留：
   `docs/rules/samples/freeimages-cn-gallery-rule.json`
