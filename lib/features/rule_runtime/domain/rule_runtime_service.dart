@@ -2,14 +2,20 @@ import '../../../core/models/catalog_entry.dart';
 import '../../../core/models/content_payload.dart';
 import '../../../core/models/detail_entry.dart';
 import '../data/html_page_fetcher.dart';
+import '../data/runtime_page_fetcher.dart';
+import '../../../core/errors/runtime_exceptions.dart';
 import 'rule_runtime_engine.dart';
 
 class RuleRuntimeService {
-  RuleRuntimeService({HtmlPageFetcher? fetcher, RuleRuntimeEngine? engine})
-    : _fetcher = fetcher ?? HtmlPageFetcher(),
-      _engine = engine ?? RuleRuntimeEngine();
+  RuleRuntimeService({
+    RuntimePageFetcher? pageFetcher,
+    HtmlPageFetcher? fetcher,
+    RuleRuntimeEngine? engine,
+  })  : _pageFetcher =
+            pageFetcher ?? RuntimePageFetcher(directFetcher: fetcher),
+        _engine = engine ?? RuleRuntimeEngine();
 
-  final HtmlPageFetcher _fetcher;
+  final RuntimePageFetcher _pageFetcher;
   final RuleRuntimeEngine _engine;
 
   Future<List<CatalogEntry>> loadIndex(Map<String, dynamic> ruleJson) async {
@@ -17,17 +23,16 @@ class RuleRuntimeService {
     final routes = (ruleJson['routes']! as Map).cast<String, dynamic>();
     final indexUrl = routes['indexUrl']! as String;
     final uri = Uri.parse(indexUrl);
-    final response = await _fetcher.fetch(
+    final response = await _pageFetcher.fetch(
       uri: uri,
-      method: request.method,
-      headers: request.headers,
+      ruleJson: ruleJson,
       timeout: request.timeout,
-      charset: request.charset,
     );
+    _throwIfVerificationPending(response);
     return _engine.parseIndex(
       ruleJson: ruleJson,
-      html: response.body,
-      pageUri: response.uri,
+      html: response.html,
+      pageUri: response.finalUri,
     );
   }
 
@@ -37,17 +42,16 @@ class RuleRuntimeService {
   }) async {
     final request = _requestConfig(ruleJson);
     final uri = Uri.parse(detailUrl);
-    final response = await _fetcher.fetch(
+    final response = await _pageFetcher.fetch(
       uri: uri,
-      method: request.method,
-      headers: request.headers,
+      ruleJson: ruleJson,
       timeout: request.timeout,
-      charset: request.charset,
     );
+    _throwIfVerificationPending(response);
     return _engine.parseDetail(
       ruleJson: ruleJson,
-      html: response.body,
-      pageUri: response.uri,
+      html: response.html,
+      pageUri: response.finalUri,
     );
   }
 
@@ -57,17 +61,17 @@ class RuleRuntimeService {
   }) async {
     final request = _requestConfig(ruleJson);
     final uri = Uri.parse(contentUrl);
-    final response = await _fetcher.fetch(
+    final response = await _pageFetcher.fetch(
       uri: uri,
-      method: request.method,
-      headers: request.headers,
+      ruleJson: ruleJson,
       timeout: request.timeout,
-      charset: request.charset,
+      decryptScript: _decryptScript(ruleJson),
     );
+    _throwIfVerificationPending(response);
     return _engine.parseContent(
       ruleJson: ruleJson,
-      html: response.body,
-      pageUri: response.uri,
+      html: response.html,
+      pageUri: response.finalUri,
     );
   }
 
@@ -91,6 +95,21 @@ class RuleRuntimeService {
       timeout: Duration(milliseconds: timeoutMs),
       headers: headers,
     );
+  }
+
+  String? _decryptScript(Map<String, dynamic> ruleJson) {
+    final contentRule =
+        (ruleJson['contentRule'] as Map?)?.cast<String, dynamic>();
+    final decryptScript = contentRule?['decryptScript'];
+    return decryptScript is String && decryptScript.isNotEmpty
+        ? decryptScript
+        : null;
+  }
+
+  void _throwIfVerificationPending(RuntimePageResult response) {
+    if (response.challengeDetected) {
+      throw const SiteVerificationPendingException();
+    }
   }
 }
 

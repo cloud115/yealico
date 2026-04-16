@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +24,20 @@ void main() {
     expect(second.body, contains('ok'));
     expect(fakeClient.callCount, 1);
   });
+
+  test(
+      'rethrows timeout exceptions so upper layers can distinguish network failures',
+      () async {
+    final fetcher = HtmlPageFetcher(client: _TimeoutHttpClient());
+
+    await expectLater(
+      () => fetcher.fetch(
+        uri: Uri.parse('https://example.com/page'),
+        method: 'GET',
+      ),
+      throwsA(isA<TimeoutException>()),
+    );
+  });
 }
 
 class _FakeHttpClient extends http.BaseClient {
@@ -43,6 +58,15 @@ class _FakeHttpClient extends http.BaseClient {
       headers: const <String, String>{
         'content-type': 'text/html; charset=utf-8',
       },
+    );
+  }
+}
+
+class _TimeoutHttpClient extends http.BaseClient {
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    return Future<http.StreamedResponse>.error(
+      TimeoutException('request timed out'),
     );
   }
 }

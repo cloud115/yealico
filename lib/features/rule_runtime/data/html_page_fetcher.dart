@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:http/http.dart' as http;
 
@@ -8,8 +9,8 @@ class HtmlPageFetcher {
   HtmlPageFetcher({
     http.Client? client,
     Duration cacheTtl = const Duration(minutes: 2),
-  }) : _client = client,
-       _cache = TtlCache<String, HtmlFetchResponse>(ttl: cacheTtl);
+  })  : _client = client,
+        _cache = TtlCache<String, HtmlFetchResponse>(ttl: cacheTtl);
 
   final http.Client? _client;
   final TtlCache<String, HtmlFetchResponse> _cache;
@@ -37,9 +38,8 @@ class HtmlPageFetcher {
 
     final client = _client ?? http.Client();
     try {
-      final response = await client
-          .get(uri, headers: headers)
-          .timeout(normalizedTimeout);
+      final response =
+          await client.get(uri, headers: headers).timeout(normalizedTimeout);
       if (response.statusCode < 200 || response.statusCode >= 300) {
         throw HtmlFetchException(
           'Request failed with status ${response.statusCode}.',
@@ -51,10 +51,15 @@ class HtmlPageFetcher {
         _cache.set(cacheKey, result);
       }
       return result;
+    } on TimeoutException {
+      rethrow;
     } on HtmlFetchException {
       rethrow;
     } on Exception catch (e) {
-      throw HtmlFetchException('Request failed: $e');
+      throw HtmlFetchException(
+        'Request failed: $e',
+        isNetworkFailure: true,
+      );
     } finally {
       if (_client == null) {
         client.close();
@@ -81,9 +86,8 @@ class HtmlPageFetcher {
   }) {
     final sortedHeaders = (headers ?? <String, String>{}).entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key));
-    final headerString = sortedHeaders
-        .map((e) => '${e.key}:${e.value}')
-        .join('|');
+    final headerString =
+        sortedHeaders.map((e) => '${e.key}:${e.value}').join('|');
     return '${uri.toString()}|$charset|$headerString';
   }
 
@@ -104,9 +108,10 @@ class HtmlFetchResponse {
 }
 
 class HtmlFetchException implements Exception {
-  const HtmlFetchException(this.message);
+  const HtmlFetchException(this.message, {this.isNetworkFailure = false});
 
   final String message;
+  final bool isNetworkFailure;
 
   @override
   String toString() => 'HtmlFetchException: $message';

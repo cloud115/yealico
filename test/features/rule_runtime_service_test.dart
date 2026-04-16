@@ -1,17 +1,27 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yealico/features/rule_runtime/data/html_page_fetcher.dart';
+import 'package:yealico/core/errors/runtime_exceptions.dart';
+import 'package:yealico/features/rule_runtime/data/runtime_page_fetcher.dart';
 import 'package:yealico/features/rule_runtime/domain/rule_runtime_engine.dart';
 import 'package:yealico/features/rule_runtime/domain/rule_runtime_service.dart';
 
 void main() {
-  test('loads index through fetcher and engine', () async {
-    final fetcher = _FakeHtmlFetcher(
-      body:
-          '<div class="item"><a href="/d1"><span class="title">A</span></a></div>',
-      uri: Uri.parse('https://example.com/list'),
-    );
+  test(
+      'loadIndex uses rendered result when runtime fetcher returns rendered html',
+      () async {
     final service = RuleRuntimeService(
-      fetcher: fetcher,
+      pageFetcher: _FakeRuntimePageFetcher(
+        result: RuntimePageResult(
+          finalUri: Uri.parse('https://example.com/list'),
+          html:
+              '<div class="item"><a href="/d1"><span class="title">A</span></a></div>',
+          title: 'List',
+          cookies: 'cf_clearance=abc',
+          requestHeaders: const <String, String>{
+            'User-Agent': 'ua',
+            'Cookie': 'cf_clearance=abc',
+          },
+        ),
+      ),
       engine: RuleRuntimeEngine(),
     );
 
@@ -21,24 +31,44 @@ void main() {
     expect(list.first.title, 'A');
     expect(list.first.detailUrl, 'https://example.com/d1');
   });
+
+  test(
+      'loadIndex throws verification pending when rendered fetch detects challenge',
+      () async {
+    final service = RuleRuntimeService(
+      pageFetcher: _FakeRuntimePageFetcher(
+        result: RuntimePageResult(
+          finalUri: Uri.parse('https://example.com/challenge'),
+          html: '<html></html>',
+          title: 'Cloudflare',
+          cookies: '',
+          requestHeaders: const <String, String>{'User-Agent': 'ua'},
+          challengeDetected: true,
+        ),
+      ),
+      engine: RuleRuntimeEngine(),
+    );
+
+    await expectLater(
+      () => service.loadIndex(_rule()),
+      throwsA(isA<SiteVerificationPendingException>()),
+    );
+  });
 }
 
-class _FakeHtmlFetcher extends HtmlPageFetcher {
-  _FakeHtmlFetcher({required this.body, required this.uri});
+class _FakeRuntimePageFetcher extends RuntimePageFetcher {
+  _FakeRuntimePageFetcher({required this.result});
 
-  final String body;
-  final Uri uri;
+  final RuntimePageResult result;
 
   @override
-  Future<HtmlFetchResponse> fetch({
+  Future<RuntimePageResult> fetch({
     required Uri uri,
-    required String method,
-    Map<String, String>? headers,
-    Duration timeout = const Duration(seconds: 10),
-    String charset = 'utf-8',
-    bool useCache = true,
+    required Map<String, dynamic> ruleJson,
+    required Duration timeout,
+    String? decryptScript,
   }) async {
-    return HtmlFetchResponse(uri: this.uri, body: body);
+    return result;
   }
 }
 
