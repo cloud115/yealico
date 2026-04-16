@@ -57,6 +57,29 @@
 单次提交聚焦单一变更，正文可补充影响范围。  
 PR 需包含：变更摘要、影响模块、执行过的命令（如 `flutter analyze`、`flutter test`）及结果；UI 改动附截图；关联对应任务或 PRD 条目。
 
+## Git 分支与标签规范
+- 默认分支模型：  
+  - 长期稳定分支：`main`  
+  - 每个 PRD 版本建立一个主开发分支：`feat/prd-<major>.<minor>.<patch>/main`  
+- 任务分支约束：  
+  - 仅在“多 agent + git worktree 并行执行任务”场景，才允许从 PRD 主分支拆分任务分支：  
+    `feat/prd-<major>.<minor>.<patch>/t<nn>-<task-slug>`  
+  - 非并行场景下，直接在对应 PRD 主分支开发，不额外拆任务分支。  
+- 其他分支命名：  
+  - `release/v<major>.<minor>.<patch>`  
+  - `fix/<slug>`、`hotfix/<slug>`、`docs/<slug>`、`chore/<slug>`、`refactor/<slug>`、`test/<slug>`  
+  - `slug` 统一使用小写字母、数字、短横线。  
+- 标签命名：  
+  - 正式发布：`v<major>.<minor>.<patch>`（示例：`v1.0.0`）  
+  - 预发布：`v<major>.<minor>.<patch>-rc.<n>` / `-beta.<n>` / `-alpha.<n>`  
+  - 标签主版本必须与目标 PRD 版本一致（例如 PRD `1.0.1` 对应 `v1.0.1` 或 `v1.0.1-rc.1`）。  
+  - 标签必须使用注解标签（annotated tag），禁止复用或强制重写已发布标签。  
+- 本仓库提供命名校验脚本：  
+  - `powershell -ExecutionPolicy Bypass -File .\\scripts\\dev\\validate_git_naming.ps1 -Type branch`  
+  - `powershell -ExecutionPolicy Bypass -File .\\scripts\\dev\\validate_git_naming.ps1 -Type tag -Name v1.0.1`（默认自动按当前分支推断 PRD 版本并校验一致性）  
+  - `powershell -ExecutionPolicy Bypass -File .\\scripts\\dev\\validate_git_naming.ps1 -Type all -PrdVersion 1.0.1`（全量标签格式 + 指定 PRD 一致性校验）  
+  - 若为多 agent + worktree 场景校验任务分支，显式增加：`-AllowTaskBranch`。
+
 ## 安全与配置提示
 受限网络下可设置 `HTTP_PROXY` 与 `HTTPS_PROXY`（见 `README.md` 与 `android/gradle.properties` 约定）。  
 `scripts/dev/freeimages_proxy_server.mjs` 仅用于本地调试，不可作为生产流量方案。  
