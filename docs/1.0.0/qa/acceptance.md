@@ -1,4 +1,4 @@
-﻿# T16 验收清单（MVP）
+﻿# 验收清单（MVP）
 
 ## 范围
 
@@ -24,10 +24,10 @@
 1. 导入有效 GitHub Raw 规则
 - 步骤：
   - 打开首页
-  - 点击 `Import Rule (T04)`
+  - 点击 `Import Rule`
   - 输入有效 raw URL
   - 点击 `Import Rule`
-  - 点击 `Add To Site List (T07)`
+  - 点击 `Add To Site List`
 - 预期：
   - 无校验失败
   - 站点出现在 `Imported Sites`
@@ -50,14 +50,14 @@
 
 4. 从导入站点打开目录
 - 步骤：
-  - 在站点卡片点击 `Open Catalog (T08)`
+  - 在站点卡片点击 `Open Catalog`
 - 预期：
   - 目录页可加载
   - 列表/空态/错误态行为正确
 
 5. 从目录项打开详情列表
 - 步骤：
-  - 在目录项点击 `Open Details (T09)`
+  - 在目录项点击 `Open Details`
 - 预期：
   - 详情页可加载
   - 列表/空态/错误态行为正确
@@ -66,13 +66,13 @@
 
 6. 从详情项解析图片 URL（`comic/gallery`）
 - 步骤：
-  - 在详情项点击 `Parse Images (T10)`
+  - 在详情项点击 `Parse Images`
 - 预期：
   - 成功展示图片 URL 列表
 
 7. 打开图片阅读器
 - 步骤：
-  - 点击 `Open Reader (T11)`
+  - 点击 `Open Reader`
   - 点击左右区域并滑动
 - 预期：
   - 页码正确更新
@@ -83,13 +83,13 @@
 
 8. 从详情项解析视频 URL（视频站点）
 - 步骤：
-  - 点击 `Parse Video URL (T12)`
+  - 点击 `Parse Video URL`
 - 预期：
   - 成功展示解析后的视频 URL
 
 9. 打开视频播放器
 - 步骤：
-  - 点击 `Play Video (T13)`
+  - 点击 `Play Video`
 - 预期：
   - 播放器页面可打开
   - 可见基础播放/暂停与拖动控制
@@ -131,3 +131,4 @@
 
 - 所有范围内必测项（A-D、E）通过。
 - 非范围项（F）被确认是有意不实现。
+

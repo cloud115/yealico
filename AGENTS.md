@@ -18,10 +18,21 @@
 - 版本索引：`docs/<version>/README.md`（如 `docs/1.0.0/README.md`、`docs/1.0.1/README.md`）。  
 - 每个 PRD 版本目录按以下分类组织：  
   - `PRD/`：需求文档与规则 schema（如 `prd.md`、`schema.md`）  
-  - `architecture/`：架构设计与任务技术方案  
-  - `progress/`：任务计划、环境基线与进展记录  
+  - `architecture/`：按“长任务/核心动作”维护架构设计；单一主需求默认合并为一个文档，若同版本有多个核心动作则并列多个文档  
+  - `progress/`：按“长任务目录 + 单任务文档”组织，目录格式 `l<nn>-<long-task-slug>/`，任务文档格式 `t<nn>-<task-slug>.md`  
   - `qa/`：验收标准、测试记录与测试报告  
   - `release/`：发布流程、检查单、交付说明与版本说明  
+- 根目录 `README.md` 的“当前阶段”必须按“版本 -> 长任务（`Lxx`）-> 任务（`txx`）”展示，且任务编号必须与 `progress` 中实际文件一一对应。  
+- 命名约束：  
+  - `architecture/` 文档使用 `a<nn>-<topic-slug>.md`。  
+  - `progress/` 长任务目录使用 `l<nn>-<long-task-slug>/`，任务文档使用 `t<nn>-<task-slug>.md`。  
+  - `qa/` 与 `release/` 文档使用语义化文件名（如 `acceptance.md`、`test-report.md`、`process.md`、`checklist.md`、`notes.md`），禁止使用 `T16`、`T17`、`T18` 这类任务号前缀。  
+- 标题约束：`architecture/progress/qa/release` 文档标题禁止使用 `Txx` 或 `Txx.x` 作为标题前缀。  
+- 目录索引约束：  
+  - 允许的索引文件仅限 `docs/README.md`、`docs/<version>/README.md`、`docs/<version>/progress/README.md`。  
+  - `architecture/`、`qa/`、`release/` 目录下不新增 `README.md`。  
+  - `progress/l<nn>-*/` 长任务目录下不新增 `README.md`。  
+- 架构文档结构约束：`architecture/a<nn>-*.md` 默认采用统一结构：`目标`、`关键设计`、`向后兼容`、`已知限制`。  
 - 新增文档优先放到对应版本目录；跨版本通用规则样例统一放在 `docs/rules/samples/`。  
 - 若某分类暂未产出正文，保留目录/索引并在对应版本 `README.md` 标注“待补充”。
 

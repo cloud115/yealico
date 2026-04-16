@@ -1,4 +1,4 @@
-# PRD 1.0.0 文档索引
+﻿# PRD 1.0.0 文档索引
 
 ## PRD
 
@@ -7,11 +7,12 @@
 
 ## 架构
 
-- `docs/1.0.0/architecture/`
+- `docs/1.0.0/architecture/a01-mvp-core-design.md`
 
 ## 进度
 
-- `docs/1.0.0/progress/`
+- `docs/1.0.0/progress/README.md`
+- `docs/1.0.0/progress/l01-mvp-core-delivery/`
 
 ## QA
 

@@ -1,0 +1,22 @@
+﻿# 进展 - 2026-04-15 （任务 13）
+
+## 已完成
+
+- 新增视频播放器页面：
+  - `lib/features/player/presentation/video_player_page.dart`
+- 视频内容页接入播放器跳转：
+  - `lib/features/content/presentation/video_content_page.dart`
+- 新增测试：
+  - `test/features/video_player_page_test.dart`
+  - 更新 `test/features/video_content_page_test.dart`
+
+## 验证
+
+- 执行 `dart format`。
+- 执行 `flutter test`（全部通过）。
+
+## 范围控制
+
+- 本步骤仅提供基础播放能力。
+- 高级播放器能力仍不在范围内。
+

@@ -18,10 +18,11 @@
 ## 质量状态
 
 - 自动化测试：`flutter test` 通过
-- 重点验收：`docs/1.0.1/qa/t18-acceptance.md`
-- 测试报告：`docs/1.0.1/qa/t18-test-report.md`
+- 重点验收：`docs/1.0.1/qa/acceptance.md`
+- 测试报告：`docs/1.0.1/qa/test-report.md`
 
 ## 已知限制
 
 - Web 端在本地调试阶段，部分强反爬站点可按需使用开发代理辅助（仅限调试）
 - 个别站点仍需要规则专项调优
+

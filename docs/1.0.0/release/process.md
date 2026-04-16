@@ -1,4 +1,4 @@
-﻿# T17 GitHub 发布流程
+﻿# GitHub 发布流程
 
 ## 目标
 
@@ -67,3 +67,4 @@
 - 若发布无效：
   - 将 Release 标记为 pre-release 或 draft
   - 从下一个补丁版本（`x.y.z+1`）发布热修复
+

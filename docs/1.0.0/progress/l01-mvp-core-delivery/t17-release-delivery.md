@@ -1,0 +1,26 @@
+﻿# 进展 - 2026-04-15 （任务 17）
+
+## 已完成
+
+- 新增发布构建脚本：
+  - `scripts/release/build_release_artifacts.ps1`
+- 新增发布流程文档：
+  - `docs/1.0.0/release/process.md`
+  - `docs/1.0.0/release/notes-template.md`
+  - `docs/1.0.0/release/checklist.md`
+- 执行发布构建验证：
+  - Web 构建：成功
+  - APK 构建：成功
+- 新增交付报告：
+  - `docs/1.0.0/release/delivery.md`
+
+## 验证
+
+- `flutter build web --release --dart-define=APP_FLAVOR=prod` 通过。
+- `flutter build apk --release --build-name=1.0.0 --build-number=1` 通过。
+
+## 范围控制
+
+- 本步骤聚焦发布交付产物与流程。
+- 运行时功能集合保持不变。
+

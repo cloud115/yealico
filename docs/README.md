@@ -1,4 +1,4 @@
-# 文档总览
+﻿# 文档总览
 
 本仓库文档已按 PRD 版本归档，统一采用 `docs/<version>/<category>/...` 结构。
 
@@ -19,6 +19,11 @@
 - `docs/1.0.1/progress/`
 - `docs/1.0.1/qa/`
 - `docs/1.0.1/release/`
+
+## 进度文档约定
+
+- `progress/` 下按“长任务”建目录：`l<nn>-<long-task-slug>/`
+- 每个长任务目录下按“单任务单文件”维护：`t<nn>-<task-slug>.md`
 
 ## 快速入口
 

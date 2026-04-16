@@ -1,0 +1,25 @@
+﻿# 进展 - 2026-04-15 （任务 10）
+
+## 已完成
+
+- 新增图片内容加载抽象与运行时实现：
+  - `lib/features/content/domain/image_content_loader.dart`
+- 新增图片 URL 列表页面：
+  - `lib/features/content/presentation/image_content_page.dart`
+- 详情页条目动作接入图片解析页：
+  - `lib/features/detail/presentation/detail_list_page.dart`
+- 新增测试：
+  - `test/features/image_content_loader_test.dart`
+  - `test/features/image_content_page_test.dart`
+  - 更新 `test/features/detail_list_page_test.dart`
+
+## 验证
+
+- 执行 `dart format`。
+- 执行 `flutter test`（全部通过）。
+
+## 范围控制
+
+- 本步骤仅包含图片 URL 提取与展示。
+- 本步骤不包含阅读器交互。
+
