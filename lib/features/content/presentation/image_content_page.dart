@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/models/content_resource.dart';
 import '../../../core/models/site_record.dart';
 import '../../../core/errors/app_error_policy.dart';
 import '../../reader/presentation/image_reader_page.dart';
@@ -25,13 +26,13 @@ class ImageContentPage extends StatefulWidget {
 
 class _ImageContentPageState extends State<ImageContentPage> {
   late final ImageContentLoader _loader;
-  Future<List<String>>? _future;
+  Future<List<ContentResource>>? _future;
 
   @override
   void initState() {
     super.initState();
     _loader = widget._loader ?? RuntimeImageContentLoader();
-    _future = _loader.loadImageUrls(
+    _future = _loader.loadImageResources(
       site: widget.site,
       contentUrl: widget.contentUrl,
     );
@@ -39,7 +40,7 @@ class _ImageContentPageState extends State<ImageContentPage> {
 
   void _retry() {
     setState(() {
-      _future = _loader.loadImageUrls(
+      _future = _loader.loadImageResources(
         site: widget.site,
         contentUrl: widget.contentUrl,
       );
@@ -50,7 +51,7 @@ class _ImageContentPageState extends State<ImageContentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('${widget.title} Images')),
-      body: FutureBuilder<List<String>>(
+      body: FutureBuilder<List<ContentResource>>(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -65,8 +66,8 @@ class _ImageContentPageState extends State<ImageContentPage> {
               onRetry: _retry,
             );
           }
-          final urls = snapshot.data ?? const <String>[];
-          if (urls.isEmpty) {
+          final resources = snapshot.data ?? const <ContentResource>[];
+          if (resources.isEmpty) {
             return const Center(child: Text('No image URLs found.'));
           }
           return Column(
@@ -81,7 +82,7 @@ class _ImageContentPageState extends State<ImageContentPage> {
                         MaterialPageRoute<void>(
                           builder: (_) => ImageReaderPage(
                             title: widget.title,
-                            imageUrls: urls,
+                            imageResources: resources,
                           ),
                         ),
                       );
@@ -94,15 +95,15 @@ class _ImageContentPageState extends State<ImageContentPage> {
               Expanded(
                 child: ListView.separated(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                  itemCount: urls.length,
+                  itemCount: resources.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   itemBuilder: (context, index) {
-                    final url = urls[index];
+                    final resource = resources[index];
                     return Card(
                       child: Padding(
                         padding: const EdgeInsets.all(12),
-                        child: Text('${index + 1}. $url'),
+                        child: Text('${index + 1}. ${resource.url}'),
                       ),
                     );
                   },

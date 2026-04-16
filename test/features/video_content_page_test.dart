@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:yealico/core/models/content_resource.dart';
 import 'package:yealico/core/models/content_type.dart';
 import 'package:yealico/core/models/rule_snapshot.dart';
 import 'package:yealico/core/models/site_record.dart';
@@ -46,10 +47,20 @@ class _FakeVideoLoader implements VideoContentLoader {
   const _FakeVideoLoader();
 
   @override
+  Future<ContentResource> loadVideoResource({
+    required SiteRecord site,
+    required String contentUrl,
+  }) async {
+    return const ContentResource(url: 'https://cdn.example.com/v1.m3u8');
+  }
+
+  @override
   Future<String> loadVideoUrl({
     required SiteRecord site,
     required String contentUrl,
   }) async {
-    return 'https://cdn.example.com/v1.m3u8';
+    final resource =
+        await loadVideoResource(site: site, contentUrl: contentUrl);
+    return resource.url;
   }
 }

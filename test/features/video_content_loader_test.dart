@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yealico/core/models/content_payload.dart';
+import 'package:yealico/core/models/content_resource.dart';
 import 'package:yealico/core/models/content_type.dart';
 import 'package:yealico/core/models/rule_snapshot.dart';
 import 'package:yealico/core/models/site_record.dart';
@@ -7,7 +8,7 @@ import 'package:yealico/features/content/domain/video_content_loader.dart';
 import 'package:yealico/features/rule_runtime/domain/rule_runtime_service.dart';
 
 void main() {
-  test('runtime video loader returns parsed video url', () async {
+  test('runtime video loader returns parsed video resource', () async {
     final loader = RuntimeVideoContentLoader(
       runtimeService: _FakeRuntimeService(),
     );
@@ -27,6 +28,13 @@ void main() {
       createdAt: now,
       updatedAt: now,
     );
+
+    final resource = await loader.loadVideoResource(
+      site: site,
+      contentUrl: 'https://example.com/ep/1',
+    );
+    expect(resource.url, 'https://cdn.example.com/v1.m3u8');
+    expect(resource.headers['Referer'], 'https://example.com');
 
     final videoUrl = await loader.loadVideoUrl(
       site: site,
@@ -72,7 +80,10 @@ class _FakeRuntimeService extends RuleRuntimeService {
     required String contentUrl,
   }) async {
     return const ContentPayload.video(
-      videoUrl: 'https://cdn.example.com/v1.m3u8',
+      video: ContentResource(
+        url: 'https://cdn.example.com/v1.m3u8',
+        headers: <String, String>{'Referer': 'https://example.com'},
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:yealico/core/models/content_resource.dart';
 import 'package:yealico/core/models/content_type.dart';
 import 'package:yealico/core/models/rule_snapshot.dart';
 import 'package:yealico/core/models/site_record.dart';
@@ -54,13 +55,23 @@ class _FakeImageLoader implements ImageContentLoader {
   const _FakeImageLoader();
 
   @override
+  Future<List<ContentResource>> loadImageResources({
+    required SiteRecord site,
+    required String contentUrl,
+  }) async {
+    return const <ContentResource>[
+      ContentResource(url: 'https://example.com/img/1.jpg'),
+      ContentResource(url: 'https://example.com/img/2.jpg'),
+    ];
+  }
+
+  @override
   Future<List<String>> loadImageUrls({
     required SiteRecord site,
     required String contentUrl,
   }) async {
-    return const <String>[
-      'https://example.com/img/1.jpg',
-      'https://example.com/img/2.jpg',
-    ];
+    final resources =
+        await loadImageResources(site: site, contentUrl: contentUrl);
+    return resources.map((resource) => resource.url).toList(growable: false);
   }
 }

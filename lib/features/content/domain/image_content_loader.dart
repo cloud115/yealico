@@ -1,10 +1,16 @@
 import 'dart:convert';
 
+import '../../../core/models/content_resource.dart';
 import '../../../core/models/content_type.dart';
 import '../../../core/models/site_record.dart';
 import '../../rule_runtime/domain/rule_runtime_service.dart';
 
 abstract interface class ImageContentLoader {
+  Future<List<ContentResource>> loadImageResources({
+    required SiteRecord site,
+    required String contentUrl,
+  });
+
   Future<List<String>> loadImageUrls({
     required SiteRecord site,
     required String contentUrl,
@@ -13,12 +19,12 @@ abstract interface class ImageContentLoader {
 
 class RuntimeImageContentLoader implements ImageContentLoader {
   RuntimeImageContentLoader({RuleRuntimeService? runtimeService})
-    : _runtimeService = runtimeService ?? RuleRuntimeService();
+      : _runtimeService = runtimeService ?? RuleRuntimeService();
 
   final RuleRuntimeService _runtimeService;
 
   @override
-  Future<List<String>> loadImageUrls({
+  Future<List<ContentResource>> loadImageResources({
     required SiteRecord site,
     required String contentUrl,
   }) async {
@@ -44,7 +50,17 @@ class RuntimeImageContentLoader implements ImageContentLoader {
         'Parsed content is video, not image list.',
       );
     }
-    return payload.imageUrls;
+    return payload.resources;
+  }
+
+  @override
+  Future<List<String>> loadImageUrls({
+    required SiteRecord site,
+    required String contentUrl,
+  }) async {
+    final resources =
+        await loadImageResources(site: site, contentUrl: contentUrl);
+    return resources.map((resource) => resource.url).toList(growable: false);
   }
 }
 

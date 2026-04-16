@@ -1,10 +1,16 @@
 import 'dart:convert';
 
+import '../../../core/models/content_resource.dart';
 import '../../../core/models/content_type.dart';
 import '../../../core/models/site_record.dart';
 import '../../rule_runtime/domain/rule_runtime_service.dart';
 
 abstract interface class VideoContentLoader {
+  Future<ContentResource> loadVideoResource({
+    required SiteRecord site,
+    required String contentUrl,
+  });
+
   Future<String> loadVideoUrl({
     required SiteRecord site,
     required String contentUrl,
@@ -13,12 +19,12 @@ abstract interface class VideoContentLoader {
 
 class RuntimeVideoContentLoader implements VideoContentLoader {
   RuntimeVideoContentLoader({RuleRuntimeService? runtimeService})
-    : _runtimeService = runtimeService ?? RuleRuntimeService();
+      : _runtimeService = runtimeService ?? RuleRuntimeService();
 
   final RuleRuntimeService _runtimeService;
 
   @override
-  Future<String> loadVideoUrl({
+  Future<ContentResource> loadVideoResource({
     required SiteRecord site,
     required String contentUrl,
   }) async {
@@ -39,12 +45,22 @@ class RuntimeVideoContentLoader implements VideoContentLoader {
       ruleJson: decoded,
       contentUrl: contentUrl,
     );
-    if (payload.contentType != ContentType.video || payload.videoUrl == null) {
+    if (payload.contentType != ContentType.video || payload.video == null) {
       throw const VideoContentLoadException(
         'Parsed content does not contain video URL.',
       );
     }
-    return payload.videoUrl!;
+    return payload.video!;
+  }
+
+  @override
+  Future<String> loadVideoUrl({
+    required SiteRecord site,
+    required String contentUrl,
+  }) async {
+    final resource =
+        await loadVideoResource(site: site, contentUrl: contentUrl);
+    return resource.url;
   }
 }
 

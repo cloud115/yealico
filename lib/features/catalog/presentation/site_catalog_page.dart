@@ -4,14 +4,24 @@ import '../../../core/models/catalog_entry.dart';
 import '../../../core/models/site_record.dart';
 import '../../../core/errors/app_error_policy.dart';
 import '../../detail/presentation/detail_list_page.dart';
+import '../../site_session/presentation/site_verification_page.dart';
 import '../domain/catalog_loader.dart';
 
+typedef SiteVerificationPageBuilder = Widget Function(
+    BuildContext context, SiteRecord site);
+
 class SiteCatalogPage extends StatefulWidget {
-  const SiteCatalogPage({super.key, required this.site, CatalogLoader? loader})
-    : _loader = loader;
+  const SiteCatalogPage({
+    super.key,
+    required this.site,
+    CatalogLoader? loader,
+    SiteVerificationPageBuilder? verificationPageBuilder,
+  })  : _loader = loader,
+        _verificationPageBuilder = verificationPageBuilder;
 
   final SiteRecord site;
   final CatalogLoader? _loader;
+  final SiteVerificationPageBuilder? _verificationPageBuilder;
 
   @override
   State<SiteCatalogPage> createState() => _SiteCatalogPageState();
@@ -34,10 +44,36 @@ class _SiteCatalogPageState extends State<SiteCatalogPage> {
     });
   }
 
+  Future<void> _openVerificationPage() async {
+    final verificationPageBuilder = widget._verificationPageBuilder;
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute<bool>(
+        builder: (context) =>
+            verificationPageBuilder?.call(context, widget.site) ??
+            SiteVerificationPage(
+              siteName: widget.site.siteName,
+              url: widget.site.baseUrl,
+            ),
+      ),
+    );
+    if (changed == true && mounted) {
+      _retry();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${widget.site.siteName} Catalog')),
+      appBar: AppBar(
+        title: Text('${widget.site.siteName} Catalog'),
+        actions: [
+          IconButton(
+            tooltip: 'Verify Session',
+            onPressed: _openVerificationPage,
+            icon: const Icon(Icons.verified_user_outlined),
+          ),
+        ],
+      ),
       body: FutureBuilder<List<CatalogEntry>>(
         future: _future,
         builder: (context, snapshot) {
@@ -60,8 +96,7 @@ class _SiteCatalogPageState extends State<SiteCatalogPage> {
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: entries.length,
-            separatorBuilder: (context, index) =>
-                const SizedBox(height: 12),
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final entry = entries[index];
               return _CatalogItemCard(

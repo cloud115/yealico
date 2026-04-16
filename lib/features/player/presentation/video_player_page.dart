@@ -9,10 +9,12 @@ class VideoPlayerPage extends StatefulWidget {
     super.key,
     required this.title,
     required this.videoUrl,
+    this.httpHeaders = const <String, String>{},
   });
 
   final String title;
   final String videoUrl;
+  final Map<String, String> httpHeaders;
 
   @override
   State<VideoPlayerPage> createState() => _VideoPlayerPageState();
@@ -40,7 +42,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       return;
     }
 
-    final controller = VideoPlayerController.networkUrl(uri);
+    final controller = VideoPlayerController.networkUrl(
+      uri,
+      httpHeaders: widget.httpHeaders,
+    );
     try {
       await controller.initialize();
       await controller.play();
@@ -112,54 +117,57 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         child: _error != null
             ? Center(child: Text(_error!))
             : controller == null
-            ? const Center(child: CircularProgressIndicator())
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  AspectRatio(
-                    aspectRatio: controller.value.aspectRatio == 0
-                        ? 16 / 9
-                        : controller.value.aspectRatio,
-                    child: VideoPlayer(controller),
-                  ),
-                  const SizedBox(height: 12),
-                  ValueListenableBuilder<VideoPlayerValue>(
-                    valueListenable: controller,
-                    builder: (context, value, _) {
-                      final total = value.duration.inMilliseconds.toDouble();
-                      final position = value.position.inMilliseconds
-                          .toDouble()
-                          .clamp(0.0, total <= 0 ? 0.0 : total);
-                      return Column(
-                        children: [
-                          Slider(
-                            value: total <= 0 ? 0.0 : position,
-                            max: total <= 0 ? 1 : total,
-                            onChanged: total <= 0 ? null : _seekTo,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: controller.value.aspectRatio == 0
+                            ? 16 / 9
+                            : controller.value.aspectRatio,
+                        child: VideoPlayer(controller),
+                      ),
+                      const SizedBox(height: 12),
+                      ValueListenableBuilder<VideoPlayerValue>(
+                        valueListenable: controller,
+                        builder: (context, value, _) {
+                          final total =
+                              value.duration.inMilliseconds.toDouble();
+                          final position = value.position.inMilliseconds
+                              .toDouble()
+                              .clamp(0.0, total <= 0 ? 0.0 : total);
+                          return Column(
                             children: [
-                              Text(_formatDuration(value.position)),
-                              Text(_formatDuration(value.duration)),
+                              Slider(
+                                value: total <= 0 ? 0.0 : position,
+                                max: total <= 0 ? 1 : total,
+                                onChanged: total <= 0 ? null : _seekTo,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(_formatDuration(value.position)),
+                                  Text(_formatDuration(value.duration)),
+                                ],
+                              ),
                             ],
-                          ),
-                        ],
-                      );
-                    },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      FilledButton.icon(
+                        onPressed: _togglePlay,
+                        icon: Icon(
+                          controller.value.isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow,
+                        ),
+                        label:
+                            Text(controller.value.isPlaying ? 'Pause' : 'Play'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  FilledButton.icon(
-                    onPressed: _togglePlay,
-                    icon: Icon(
-                      controller.value.isPlaying
-                          ? Icons.pause
-                          : Icons.play_arrow,
-                    ),
-                    label: Text(controller.value.isPlaying ? 'Pause' : 'Play'),
-                  ),
-                ],
-              ),
       ),
     );
   }

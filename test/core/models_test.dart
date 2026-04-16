@@ -31,7 +31,7 @@ void main() {
 
   test('content payload map conversion for video', () {
     const payload = ContentPayload.video(
-      videoUrl: 'https://cdn.example.com/video.mp4',
+      video: ContentResource(url: 'https://cdn.example.com/video.mp4'),
     );
     final decoded = ContentPayload.fromMap(payload.toMap());
 

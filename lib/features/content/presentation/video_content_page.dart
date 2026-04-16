@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/models/content_resource.dart';
 import '../../../core/models/site_record.dart';
 import '../../../core/errors/app_error_policy.dart';
 import '../../player/presentation/video_player_page.dart';
@@ -25,13 +26,13 @@ class VideoContentPage extends StatefulWidget {
 
 class _VideoContentPageState extends State<VideoContentPage> {
   late final VideoContentLoader _loader;
-  Future<String>? _future;
+  Future<ContentResource>? _future;
 
   @override
   void initState() {
     super.initState();
     _loader = widget._loader ?? RuntimeVideoContentLoader();
-    _future = _loader.loadVideoUrl(
+    _future = _loader.loadVideoResource(
       site: widget.site,
       contentUrl: widget.contentUrl,
     );
@@ -39,7 +40,7 @@ class _VideoContentPageState extends State<VideoContentPage> {
 
   void _retry() {
     setState(() {
-      _future = _loader.loadVideoUrl(
+      _future = _loader.loadVideoResource(
         site: widget.site,
         contentUrl: widget.contentUrl,
       );
@@ -50,7 +51,7 @@ class _VideoContentPageState extends State<VideoContentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('${widget.title} Video URL')),
-      body: FutureBuilder<String>(
+      body: FutureBuilder<ContentResource>(
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -65,7 +66,8 @@ class _VideoContentPageState extends State<VideoContentPage> {
               onRetry: _retry,
             );
           }
-          final videoUrl = snapshot.data;
+          final resource = snapshot.data;
+          final videoUrl = resource?.url;
           if (videoUrl == null || videoUrl.isEmpty) {
             return const Center(child: Text('No video URL found.'));
           }
@@ -88,6 +90,8 @@ class _VideoContentPageState extends State<VideoContentPage> {
                         builder: (_) => VideoPlayerPage(
                           title: widget.title,
                           videoUrl: videoUrl,
+                          httpHeaders:
+                              resource?.headers ?? const <String, String>{},
                         ),
                       ),
                     );

@@ -33,6 +33,7 @@ dependencies:
   http: ^1.2.2
   html: ^0.15.6
   video_player: ^2.9.2
+  webview_flutter: ^4.9.0
 
 dev_dependencies:
   flutter_test:

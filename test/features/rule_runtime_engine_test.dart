@@ -1,3 +1,4 @@
+import 'package:yealico/core/errors/runtime_exceptions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yealico/core/models/content_type.dart';
 import 'package:yealico/features/rule_runtime/domain/rule_runtime_engine.dart';
@@ -61,6 +62,10 @@ void main() {
       'https://example.com/img/1.jpg',
       'https://example.com/img/2.jpg',
     ]);
+    expect(
+        payload.resources.map((resource) => resource.url), payload.imageUrls);
+    expect(payload.resources.every((resource) => resource.headers.isEmpty),
+        isTrue);
   });
 
   test('parses video content URL', () {
@@ -77,7 +82,46 @@ void main() {
     );
 
     expect(payload.contentType, ContentType.video);
+    expect(payload.video?.url, 'https://example.com/media/v1.mp4');
     expect(payload.videoUrl, 'https://example.com/media/v1.mp4');
+  });
+
+  test('decryptScript results override html selector parsing for image payload',
+      () {
+    final rule = _comicRule();
+    const html = '<html><body><div class="reader"></div></body></html>';
+    final payload = engine.parseContent(
+      ruleJson: rule,
+      html: html,
+      pageUri: Uri.parse('https://example.com/read/1'),
+      decryptResult: '["/from/decrypt/1.jpg","https://cdn.example.com/2.jpg"]',
+      requestHeaders: const <String, String>{
+        'Referer': 'https://example.com',
+        'Cookie': 'cf_clearance=abc',
+      },
+    );
+
+    expect(payload.contentType, ContentType.comic);
+    expect(payload.imageUrls, [
+      'https://example.com/from/decrypt/1.jpg',
+      'https://cdn.example.com/2.jpg',
+    ]);
+    expect(payload.resources.first.headers['Referer'], 'https://example.com');
+    expect(payload.resources.first.headers['Cookie'], 'cf_clearance=abc');
+  });
+
+  test('throws decrypt script exception when decrypt result is invalid json',
+      () {
+    final rule = _comicRule();
+    expect(
+      () => engine.parseContent(
+        ruleJson: rule,
+        html: '<html></html>',
+        pageUri: Uri.parse('https://example.com/read/1'),
+        decryptResult: 'not-json',
+      ),
+      throwsA(isA<DecryptScriptExecutionException>()),
+    );
   });
 }
 

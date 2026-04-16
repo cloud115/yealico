@@ -72,6 +72,8 @@ class RuleRuntimeService {
       ruleJson: ruleJson,
       html: response.html,
       pageUri: response.finalUri,
+      decryptResult: response.decryptResult,
+      requestHeaders: response.requestHeaders,
     );
   }
 

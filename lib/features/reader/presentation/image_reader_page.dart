@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
-typedef ReaderImageBuilder =
-    Widget Function(BuildContext context, String imageUrl, int index);
+import '../../../core/models/content_resource.dart';
+import '../domain/image_prefetch_scheduler.dart';
+
+typedef ReaderImageBuilder = Widget Function(
+    BuildContext context, ContentResource resource, int index);
 
 class ImageReaderPage extends StatefulWidget {
   const ImageReaderPage({
     super.key,
     required this.title,
-    required this.imageUrls,
+    required this.imageResources,
     this.imageBuilder,
-  });
+    ImagePrefetchScheduler? prefetchScheduler,
+  }) : _prefetchScheduler = prefetchScheduler;
 
   final String title;
-  final List<String> imageUrls;
+  final List<ContentResource> imageResources;
   final ReaderImageBuilder? imageBuilder;
+  final ImagePrefetchScheduler? _prefetchScheduler;
 
   @override
   State<ImageReaderPage> createState() => _ImageReaderPageState();
@@ -21,6 +26,7 @@ class ImageReaderPage extends StatefulWidget {
 
 class _ImageReaderPageState extends State<ImageReaderPage> {
   late final PageController _controller;
+  late final ImagePrefetchScheduler _prefetchScheduler;
   int _currentIndex = 0;
   final Set<int> _prefetched = <int>{};
 
@@ -28,16 +34,18 @@ class _ImageReaderPageState extends State<ImageReaderPage> {
   void initState() {
     super.initState();
     _controller = PageController();
+    _prefetchScheduler = widget._prefetchScheduler ?? ImagePrefetchScheduler();
   }
 
   @override
   void dispose() {
+    _prefetchScheduler.dispose();
     _controller.dispose();
     super.dispose();
   }
 
   Future<void> _goToNextPage() async {
-    if (_currentIndex >= widget.imageUrls.length - 1) {
+    if (_currentIndex >= widget.imageResources.length - 1) {
       return;
     }
     await _controller.nextPage(
@@ -79,14 +87,15 @@ class _ImageReaderPageState extends State<ImageReaderPage> {
 
   Widget _defaultImageBuilder(
     BuildContext context,
-    String imageUrl,
+    ContentResource resource,
     int index,
   ) {
     return InteractiveViewer(
       minScale: 1,
       maxScale: 4,
       child: Image.network(
-        imageUrl,
+        resource.url,
+        headers: resource.headers,
         fit: BoxFit.contain,
         loadingBuilder: (context, child, progress) {
           if (progress == null) {
@@ -106,7 +115,7 @@ class _ImageReaderPageState extends State<ImageReaderPage> {
 
   @override
   Widget build(BuildContext context) {
-    final total = widget.imageUrls.length;
+    final total = widget.imageResources.length;
     final imageBuilder = widget.imageBuilder ?? _defaultImageBuilder;
 
     return Scaffold(
@@ -139,7 +148,7 @@ class _ImageReaderPageState extends State<ImageReaderPage> {
                     return Center(
                       child: imageBuilder(
                         context,
-                        widget.imageUrls[index],
+                        widget.imageResources[index],
                         index,
                       ),
                     );
@@ -177,23 +186,28 @@ class _ImageReaderPageState extends State<ImageReaderPage> {
   }
 
   void _prefetchAround(int index) {
-    _prefetchImage(index + 1);
+    _prefetchImage(index - 2);
     _prefetchImage(index - 1);
+    _prefetchImage(index + 1);
+    _prefetchImage(index + 2);
   }
 
-  Future<void> _prefetchImage(int index) async {
-    if (index < 0 || index >= widget.imageUrls.length) {
+  void _prefetchImage(int index) {
+    if (index < 0 || index >= widget.imageResources.length) {
       return;
     }
     if (_prefetched.contains(index)) {
       return;
     }
     _prefetched.add(index);
-    final provider = NetworkImage(widget.imageUrls[index]);
-    try {
-      await precacheImage(provider, context);
-    } catch (_) {
-      // Ignore prefetch failures and keep reader usable.
-    }
+    final resource = widget.imageResources[index];
+    _prefetchScheduler.schedule(() async {
+      final provider = NetworkImage(resource.url, headers: resource.headers);
+      try {
+        await precacheImage(provider, context);
+      } catch (_) {
+        // Ignore prefetch failures and keep reader usable.
+      }
+    });
   }
 }

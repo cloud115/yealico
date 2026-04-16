@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yealico/core/models/content_payload.dart';
+import 'package:yealico/core/models/content_resource.dart';
 import 'package:yealico/core/models/content_type.dart';
 import 'package:yealico/core/models/rule_snapshot.dart';
 import 'package:yealico/core/models/site_record.dart';
@@ -7,7 +8,7 @@ import 'package:yealico/features/content/domain/image_content_loader.dart';
 import 'package:yealico/features/rule_runtime/domain/rule_runtime_service.dart';
 
 void main() {
-  test('runtime image loader returns image urls for comic site', () async {
+  test('runtime image loader returns image resources for comic site', () async {
     final loader = RuntimeImageContentLoader(
       runtimeService: _FakeRuntimeService(),
     );
@@ -28,11 +29,20 @@ void main() {
       updatedAt: now,
     );
 
-    final urls = await loader.loadImageUrls(
+    final resources = await loader.loadImageResources(
       site: site,
       contentUrl: 'https://example.com/read/1',
     );
 
+    expect(resources.map((resource) => resource.url), [
+      'https://example.com/img/1.jpg',
+    ]);
+    expect(resources.first.headers['Referer'], 'https://example.com');
+
+    final urls = await loader.loadImageUrls(
+      site: site,
+      contentUrl: 'https://example.com/read/1',
+    );
     expect(urls, ['https://example.com/img/1.jpg']);
   });
 
@@ -74,7 +84,12 @@ class _FakeRuntimeService extends RuleRuntimeService {
   }) async {
     return const ContentPayload.comicOrGallery(
       contentType: ContentType.comic,
-      imageUrls: <String>['https://example.com/img/1.jpg'],
+      resources: <ContentResource>[
+        ContentResource(
+          url: 'https://example.com/img/1.jpg',
+          headers: <String, String>{'Referer': 'https://example.com'},
+        ),
+      ],
     );
   }
 }
