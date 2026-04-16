@@ -5,7 +5,7 @@
 `test/` 与 `lib/` 对齐，当前以 `test/core/` 和 `test/features/` 为主。  
 `scripts/dev/` 放本地调试工具（如 Web 代理），`scripts/release/` 放发布脚本。  
 `docs/` 采用版本化归档，统一结构为 `docs/<version>/<category>/...`；当前版本索引见 `docs/README.md`，规则样例在 `docs/rules/samples/`。  
-平台工程仅维护 `android/` 与 `web/`；`windows/` 目录已移除，不在当前维护范围。
+平台工程目录为 `android/` 与 `web/`。
 
 ## 文档结构规范
 - 根索引：`docs/README.md`。  

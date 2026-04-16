@@ -6,11 +6,10 @@
 
 - 运行目标：Android App
 - 开发/调试目标：Web
-- 当前仓库不维护：Windows 桌面端（`windows/` 目录已移除）
 
 ## 版本基线
 
-- 当前应用版本：`1.0.0+1`（见 `pubspec.yaml`）
+- 当前应用版本：`1.0.1+2`（见 `pubspec.yaml`）
 - 文档根索引：`docs/README.md`
 - 已归档 PRD 版本：`1.0.0`、`1.0.1`
 - 版本约束：
@@ -80,33 +79,19 @@
 
 ## Web 调试代理（FreeImages）
 
-当目标站点阻止浏览器 CORS 时，仅用于本地 Web 调试。
+当目标站点触发浏览器 CORS 或上游反爬拦截时，仅用于本地 Web 调试。
 
-1. 启动代理服务：
-   `node scripts/dev/freeimages_proxy_server.mjs`
-   FreeImages 推荐方式（PowerShell + 上游代理）：
-   `$env:UPSTREAM_FETCH_MODE='powershell'; $env:HTTPS_PROXY='http://127.0.0.1:7890'; node scripts/dev/freeimages_proxy_server.mjs`
+1. 一键启动代理服务（推荐）：
+   `powershell -ExecutionPolicy Bypass -File .\scripts\dev\start_web_debug_proxy.ps1`
+   常用参数：
+   `powershell -ExecutionPolicy Bypass -File .\scripts\dev\start_web_debug_proxy.ps1 -ProxyUrl 'http://127.0.0.1:7890' -FetchMode powershell -Port 8787`
+   若当前网络无需上游代理：
+   `powershell -ExecutionPolicy Bypass -File .\scripts\dev\start_web_debug_proxy.ps1 -NoProxy`
 2. 检查健康接口：
    `http://localhost:8787/health`
 3. 导入代理规则文件：
    `docs/rules/samples/freeimages-cn-gallery-rule-web-dev-proxy.json`
 4. 以 dev 模式运行 Flutter Web 并打开导入站点。
 
-## Android 调试代理（FreeImages）
-
-当目标站点对 Dart/Node 请求指纹返回 `403` 时，将 Android 请求同样路由到本地代理：
-
-1. 在主机启动代理服务（同上）。
-2. Android 模拟器导入：
-   `docs/rules/samples/freeimages-cn-gallery-rule-android-dev-proxy.json`
-3. 真机调试时，将该规则中的 `10.0.2.2` 替换为主机局域网 IP。
-
-Android 说明：
-- `debug/profile` manifest 已允许本地 `http://` 调试代理明文流量。
-- 直连规则（`https://www.freeimages.com/...`）在 Android 仍可能因上游反爬返回 `403`，开发验证请使用代理规则。
-
 注意：
-- 该代理仅用于本地开发，不能作为生产流量基础设施。
-- 上游模式选项：`UPSTREAM_FETCH_MODE=auto|node|powershell`（默认 `auto`）。
-- Android 非 Web 直连规则文件仍保留：
-  `docs/rules/samples/freeimages-cn-gallery-rule.json`
+- Web 调试代理仅用于本地开发，不能作为生产流量基础设施。

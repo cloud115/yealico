@@ -23,4 +23,8 @@
 
 ## 发布
 
-- `docs/1.0.1/release/`（当前版本发布文档待补充）
+- `docs/1.0.1/release/README.md`
+- `docs/1.0.1/release/process.md`
+- `docs/1.0.1/release/checklist.md`
+- `docs/1.0.1/release/notes-template.md`
+- `docs/1.0.1/release/notes.md`

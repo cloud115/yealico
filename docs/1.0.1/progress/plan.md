@@ -18,7 +18,7 @@
 - Android 侧新增隐藏 WebView + MethodChannel 渲染抓取桥接。
 - Flutter 运行时按平台选择抓取策略：
   - Android：优先渲染抓取
-  - Web/开发代理：保持直连抓取
+  - Web：默认直连抓取；调试强反爬站点时可按需使用本地开发代理辅助
 - 内容资源从“裸 URL 字符串”升级为“URL + 请求头”对象，确保图片/视频请求可复用 Cookie、Referer、UA。
 
 ## 计划文件变更
@@ -181,6 +181,6 @@ flutter test
 
 ## 备注
 
-- 本计划保持 Web 端开发代理路径不变，`1.0.1` 以 Android 加固为主。
+- 本计划仅保留 Web 端本地调试代理路径；Android 侧统一走 WebView 渲染抓取与 runtime hardening。
 - 最大 API 变化是内容资源模型从“字符串 URL”升级为“带 headers 的资源对象”。
 - 新增依赖仅 `webview_flutter`，用于可视化会话验证页面；隐藏渲染抓取仍由原生 Android 实现。

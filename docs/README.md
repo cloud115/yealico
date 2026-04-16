@@ -6,7 +6,6 @@
 
 - 运行目标：Android App
 - 开发/调试目标：Web
-- 不维护：Windows 桌面端（`windows/` 目录已移除）
 
 ## 目录结构
 
